@@ -1,10 +1,20 @@
-import { Award, CheckCircle2, ChevronDown, ChevronUp, Circle, Target, Trophy, X } from 'lucide-react';
+import { useEffect } from 'react';
+import { CheckCircle2, ChevronDown, ChevronUp, Circle, Trophy, X } from 'lucide-react';
 import { useSimulationStore } from '../../store/simulationStore';
 import { formatMoney } from '../../core/masterData/linePet2Catalog';
+import { useDeviceViewport } from '../../hooks/useDeviceViewport';
 
 export function ExecutiveChallengeHUD() {
+  const { isMobile } = useDeviceViewport();
   const challengeMinimized = useSimulationStore((s) => s.challengeMinimized);
   const setChallengeMinimized = useSimulationStore((s) => s.setChallengeMinimized);
+
+  // Auto-collapse the challenge card on small phone viewports to keep the 3D plant wide open
+  useEffect(() => {
+    if (isMobile) {
+      setChallengeMinimized(true);
+    }
+  }, [isMobile, setChallengeMinimized]);
   const missionsCompleted = useSimulationStore((s) => s.missionsCompleted);
   const challengeScorecardOpen = useSimulationStore((s) => s.challengeScorecardOpen);
   const setChallengeScorecardOpen = useSimulationStore((s) => s.setChallengeScorecardOpen);
@@ -50,7 +60,7 @@ export function ExecutiveChallengeHUD() {
   return (
     <>
       {/* Compact Interactive Challenge Card */}
-      <div className="pointer-events-auto w-[310px] ce-chamfer-sm bg-[var(--ce-bg-card)] backdrop-blur-md border border-[#0866FF]/55 shadow-xl overflow-hidden">
+      <div className="pointer-events-auto w-[calc(100vw-24px)] max-w-[310px] ce-chamfer-sm bg-[var(--ce-bg-card)] backdrop-blur-md border border-[#0866FF]/55 shadow-xl overflow-hidden">
         <div className="w-full h-[3px] bg-[var(--ce-border-subtle)]">
           <div
             className="h-full ce-signal-bar transition-all duration-300"

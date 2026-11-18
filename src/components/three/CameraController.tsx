@@ -4,15 +4,24 @@ import { OrbitControls } from '@react-three/drei';
 import * as THREE from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 import { useSimulationStore } from '../../store/simulationStore';
+import { useDeviceViewport } from '../../hooks/useDeviceViewport';
 
 export function CameraController() {
   const controlsRef = useRef<OrbitControlsImpl>(null);
   const { camera } = useThree();
   const cameraTargetPose = useSimulationStore((s) => s.cameraTargetPose);
+  const { recommendedFov, isMobile } = useDeviceViewport();
 
   const desiredPos = useRef(new THREE.Vector3(...cameraTargetPose.position));
   const desiredTarget = useRef(new THREE.Vector3(...cameraTargetPose.target));
   const isFlying = useRef(true);
+
+  useEffect(() => {
+    if (camera instanceof THREE.PerspectiveCamera && camera.fov !== recommendedFov) {
+      camera.fov = recommendedFov;
+      camera.updateProjectionMatrix();
+    }
+  }, [camera, recommendedFov]);
 
   useEffect(() => {
     desiredPos.current.set(...cameraTargetPose.position);
@@ -21,7 +30,6 @@ export function CameraController() {
   }, [cameraTargetPose]);
 
   useFrame((_, delta) => {
-    // Advance simulation core in lockstep with render loop
     useSimulationStore.getState().tick(delta);
 
     if (isFlying.current && controlsRef.current) {
@@ -46,8 +54,12 @@ export function CameraController() {
       enableDamping
       dampingFactor={0.065}
       minDistance={1.9}
-      maxDistance={40}
+      maxDistance={isMobile ? 46 : 40}
       maxPolarAngle={Math.PI / 2 - 0.04}
+      touches={{
+        ONE: THREE.TOUCH.ROTATE,
+        TWO: THREE.TOUCH.DOLLY_PAN
+      }}
       onStart={() => {
         isFlying.current = false;
       }}

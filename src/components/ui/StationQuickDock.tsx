@@ -80,7 +80,7 @@ export function StationQuickDock() {
       </div>
 
       {/* Main Game/Configurator Quick-Jump Dock */}
-      <div className="relative flex flex-wrap items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-[12px] bg-[var(--ce-bg-card)] backdrop-blur-md border border-[var(--ce-border-strong)] shadow-2xl">
+      <div className="relative flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-[12px] bg-[var(--ce-bg-card)] backdrop-blur-md border border-[var(--ce-border-strong)] shadow-2xl max-w-[calc(100vw-16px)] overflow-x-auto">
         {/* Overview Button (Key 0) */}
         <button
           onClick={resetCameraOverview}

@@ -9,24 +9,26 @@ import { BottleFlowInstanced } from './BottleFlowInstanced';
 import { HseEffects3D } from './HseEffects3D';
 import { SpatialOverlays } from './SpatialOverlays';
 import { useSimulationStore } from '../../store/simulationStore';
+import { useDeviceViewport } from '../../hooks/useDeviceViewport';
 
 export function PlantCanvas() {
   const viewMode = useSimulationStore((s) => s.viewMode);
   const selectMachine = useSimulationStore((s) => s.selectMachine);
+  const { recommendedDpr, recommendedFov } = useDeviceViewport();
   const isXray = viewMode === 'rayos_x';
 
   return (
-    <div className="w-full h-full relative select-none">
+    <div className="w-full h-full relative select-none touch-none">
       <Canvas
         shadows
-        dpr={[1, 2]}
+        dpr={recommendedDpr}
         gl={{
           antialias: true,
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: isXray ? 1.0 : 1.12,
           powerPreference: 'high-performance'
         }}
-        camera={{ position: [-2.2, 6.2, 11.4], fov: 42, near: 0.15, far: 130 }}
+        camera={{ position: [-2.2, 6.2, 11.4], fov: recommendedFov, near: 0.15, far: 130 }}
         onPointerMissed={() => selectMachine(null, false)}
       >
         <color attach="background" args={[isXray ? '#050D1F' : '#111927']} />

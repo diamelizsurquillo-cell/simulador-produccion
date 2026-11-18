@@ -7,20 +7,25 @@ import {
   Flame,
   Gauge,
   Layers,
+  Menu,
   Moon,
   ScanLine,
   Scissors,
   ShieldCheck,
   Sun,
   Volume2,
-  VolumeX
+  VolumeX,
+  X
 } from 'lucide-react';
 import { useSimulationStore } from '../../store/simulationStore';
 import { CurrencyCode, ViewMode3D } from '../../core/masterData/types';
 import { formatMoney } from '../../core/masterData/linePet2Catalog';
+import { useDeviceViewport } from '../../hooks/useDeviceViewport';
 
 export function TopHeader() {
   const [speedPopoverOpen, setSpeedPopoverOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isMobile, isCompact } = useDeviceViewport();
 
   const theme = useSimulationStore((s) => s.theme);
   const setTheme = useSimulationStore((s) => s.setTheme);
@@ -63,16 +68,24 @@ export function TopHeader() {
   ];
 
   return (
-    <header className="pointer-events-auto h-[58px] px-4 flex items-center justify-between gap-3 bg-[var(--ce-bg-canvas-veil)] backdrop-blur-md border-b border-[var(--ce-border-subtle)] z-30">
-      {/* 1. Left: Official Canal Ejecutivo Master Logo + Plant Title */}
-      <div className="flex items-center gap-3 shrink-0">
-        <img
-          src={logoSrc}
-          alt="Canal Ejecutivo"
-          className="h-[26px] w-auto object-contain select-none"
-        />
-        <div className="w-[3px] h-6 bg-[#0866FF]" />
-        <div className="hidden sm:block">
+    <header className="pointer-events-auto relative h-[58px] px-2.5 sm:px-4 flex items-center justify-between gap-2 bg-[var(--ce-bg-canvas-veil)] backdrop-blur-md border-b border-[var(--ce-border-subtle)] z-30">
+      {/* 1. Left: Brand Logo (Isotipo in Mobile, Full Horizontal Logo in Tablet/Laptop/PC) */}
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        {isMobile ? (
+          <img
+            src="/brand/ce-app-icon-512.png"
+            alt="Canal Ejecutivo"
+            className="h-8 w-8 rounded-[6px] object-contain select-none"
+          />
+        ) : (
+          <img
+            src={logoSrc}
+            alt="Canal Ejecutivo"
+            className="h-[24px] lg:h-[26px] w-auto object-contain select-none"
+          />
+        )}
+        <div className="w-[3px] h-6 bg-[#0866FF] hidden sm:block" />
+        <div className="hidden lg:block">
           <div className="ce-heading text-[14.5px] text-[var(--ce-text-primary)] leading-tight">
             SIMULADOR 3D · Línea PET 2
           </div>
@@ -82,33 +95,32 @@ export function TopHeader() {
         </div>
       </div>
 
-      {/* 2. Center: Minimalist 3-KPI Live Pulse Bar (OEE + Quick Speed + Live Money Bleed Taximeter) */}
-      <div className="flex items-center gap-2 px-3 py-1 rounded-[10px] bg-[var(--ce-bg-section)] border border-[var(--ce-border-subtle)]">
-        {/* KPI 1: OEE */}
-        <div className="px-2 flex items-center gap-2">
-          <span className="text-[11px] text-[var(--ce-text-muted)] hidden md:inline">OEE</span>
-          <span className="ce-mono text-[14px] font-bold text-[var(--ce-text-primary)]">
+      {/* 2. Center: Minimalist 3-KPI Live Pulse Bar (Adapts cleanly down to 360px) */}
+      <div className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 rounded-[10px] bg-[var(--ce-bg-section)] border border-[var(--ce-border-subtle)] min-w-0">
+        <div className="px-1 sm:px-2 flex items-center gap-1 sm:gap-1.5">
+          <span className="text-[10px] sm:text-[11px] text-[var(--ce-text-muted)]">OEE</span>
+          <span className="ce-mono text-[12px] sm:text-[14px] font-bold text-[var(--ce-text-primary)]">
             {oeePct.toLocaleString('es-419', { minimumFractionDigits: 1 })}%
           </span>
         </div>
 
-        <div className="w-[1px] h-5 bg-[var(--ce-border-strong)]" />
+        <div className="w-[1px] h-4 sm:h-5 bg-[var(--ce-border-strong)]" />
 
-        {/* KPI 2: Clickable Speed Tuner */}
         <div className="relative">
           <button
             onClick={() => setSpeedPopoverOpen(!speedPopoverOpen)}
-            className="px-2 py-0.5 rounded-[6px] hover:bg-[var(--ce-bg-card-elevated)] flex items-center gap-1.5 cursor-pointer transition"
+            className="px-1.5 sm:px-2 py-0.5 rounded-[6px] hover:bg-[var(--ce-bg-card-elevated)] flex items-center gap-1 cursor-pointer transition"
             title="Cambiar ritmo de la línea en vivo"
           >
-            <Gauge className="w-3.5 h-3.5 text-[#63EDFF]" />
-            <span className="ce-mono text-[13.5px] font-semibold text-[var(--ce-text-primary)]">
-              {effectiveBpm} <span className="text-[11px] text-[var(--ce-text-muted)]">bpm</span>
+            <Gauge className="w-3.5 h-3.5 text-[#63EDFF] shrink-0" />
+            <span className="ce-mono text-[12px] sm:text-[13.5px] font-semibold text-[var(--ce-text-primary)]">
+              {effectiveBpm}
+              <span className="text-[10px] text-[var(--ce-text-muted)] hidden sm:inline"> bpm</span>
             </span>
           </button>
 
           {speedPopoverOpen && (
-            <div className="absolute top-10 left-0 w-[230px] p-2.5 rounded-[10px] bg-[#050D1F] border border-[#0866FF] shadow-2xl z-50 space-y-2">
+            <div className="absolute top-10 left-1/2 -translate-x-1/2 sm:left-0 sm:translate-x-0 w-[230px] p-2.5 rounded-[10px] bg-[#050D1F] border border-[#0866FF] shadow-2xl z-50 space-y-2">
               <div className="ce-overline text-[9.5px] text-[#63EDFF] flex justify-between">
                 <span>RITMO DE LLENADORA</span>
                 <span>{targetSpeedBpm} BPM</span>
@@ -126,7 +138,7 @@ export function TopHeader() {
                       setTargetSpeedBpm(opt.bpm);
                       setSpeedPopoverOpen(false);
                     }}
-                    className={`py-1.5 px-2 rounded-[6px] text-[11px] font-semibold cursor-pointer border ${
+                    className={`py-2 px-2 rounded-[6px] text-[11px] font-semibold cursor-pointer border ${
                       Math.abs(targetSpeedBpm - opt.bpm) <= 3
                         ? 'bg-[#0866FF] text-white border-[#0866FF]'
                         : opt.best
@@ -142,122 +154,187 @@ export function TopHeader() {
           )}
         </div>
 
-        <div className="w-[1px] h-5 bg-[var(--ce-border-strong)]" />
+        <div className="w-[1px] h-4 sm:h-5 bg-[var(--ce-border-strong)]" />
 
-        {/* KPI 3: Live Financial Bleed / Savings Ticker */}
         {isHealthyOptimized ? (
-          <div
-            className="px-2.5 py-0.5 rounded-[6px] bg-[#12B76A]/15 border border-[#12B76A]/50 flex items-center gap-1.5"
-            title="Pérdida controlada gracias al Bypass HMI en V23"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-[#12B76A]" />
-            <span className="text-[11px] text-[#12B76A] hidden lg:inline font-medium">Salvado:</span>
-            <span className="ce-mono text-[13px] font-bold text-[#12B76A]">
-              +{formatMoney(Math.max(12_000, sessionMoneySavedCop), currency)}
+          <div className="px-1.5 sm:px-2.5 py-0.5 rounded-[6px] bg-[#12B76A]/15 border border-[#12B76A]/50 flex items-center gap-1">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#12B76A] shrink-0" />
+            <span className="text-[11px] text-[#12B76A] hidden xl:inline font-medium">Salvado:</span>
+            <span className="ce-mono text-[11.5px] sm:text-[13px] font-bold text-[#12B76A] truncate">
+              +{formatMoney(Math.max(12_000, sessionMoneySavedCop), currency, isCompact)}
             </span>
           </div>
         ) : (
-          <div
-            className="px-2.5 py-0.5 rounded-[6px] bg-[#F04438]/15 border border-[#F04438]/55 flex items-center gap-1.5"
-            title={`Fuga activa de dinero (${formatMoney(currentBleedRateCopPerHour, currency, true)}/h por rechazos y sobrellenado)`}
-          >
-            <Flame className="w-3.5 h-3.5 text-[#F04438] animate-pulse" />
-            <span className="text-[11px] text-[#FCA5A5] hidden lg:inline font-medium">
+          <div className="px-1.5 sm:px-2.5 py-0.5 rounded-[6px] bg-[#F04438]/15 border border-[#F04438]/55 flex items-center gap-1">
+            <Flame className="w-3.5 h-3.5 text-[#F04438] animate-pulse shrink-0" />
+            <span className="text-[11px] text-[#FCA5A5] hidden xl:inline font-medium">
               {operatorCompensatesSetpoint ? 'Sobrellenado:' : 'Perdiendo:'}
             </span>
-            <span className="ce-mono text-[13px] font-bold text-[#F04438]">
-              -{formatMoney(sessionMoneyLostCop, currency)}
+            <span className="ce-mono text-[11.5px] sm:text-[13px] font-bold text-[#F04438] truncate">
+              -{formatMoney(sessionMoneyLostCop, currency, isCompact)}
             </span>
           </div>
         )}
       </div>
 
-      {/* 3. Right: Clean 3D Modes + Essential Controls */}
-      <div className="flex items-center gap-1.5">
+      {/* 3. Right: Adaptive Controls (Full on PC/Laptop, Compact Drawer + Menu on Mobile/Tablet) */}
+      <div className="flex items-center gap-1.5 shrink-0">
         <div className="hidden xl:flex items-center p-0.5 rounded-[8px] bg-[var(--ce-bg-section)] border border-[var(--ce-border-subtle)]">
-          {viewModes.map((m) => {
-            const active = viewMode === m.id;
-            return (
-              <button
-                key={m.id}
-                onClick={() => setViewMode(m.id)}
-                className={`px-2.5 py-1 rounded-[6px] text-[12px] font-semibold flex items-center gap-1 transition cursor-pointer ${
-                  active
-                    ? 'bg-[#0866FF] text-white'
-                    : 'text-[var(--ce-text-secondary)] hover:text-[var(--ce-text-primary)]'
-                }`}
-              >
-                {m.icon}
-                <span>{m.label}</span>
-              </button>
-            );
-          })}
+          {viewModes.map((m) => (
+            <button
+              key={m.id}
+              onClick={() => setViewMode(m.id)}
+              className={`px-2.5 py-1 rounded-[6px] text-[12px] font-semibold flex items-center gap-1 transition cursor-pointer ${
+                viewMode === m.id
+                  ? 'bg-[#0866FF] text-white'
+                  : 'text-[var(--ce-text-secondary)] hover:text-[var(--ce-text-primary)]'
+              }`}
+            >
+              {m.icon}
+              <span>{m.label}</span>
+            </button>
+          ))}
         </div>
 
-        <button
-          onClick={() => setFortyExcelsModalOpen(true)}
-          className="px-2.5 py-1.5 rounded-[8px] text-[12px] font-semibold flex items-center gap-1.5 border border-[#63EDFF]/45 bg-[var(--ce-accent-ai-bg)] text-[var(--ce-accent-ai)] hover:border-[#63EDFF] transition cursor-pointer"
-          title="Ver por qué 40 Excel rotos ocultan este problema"
-        >
-          <FileSpreadsheet className="w-3.5 h-3.5" />
-          <span className="hidden md:inline">40 Excel</span>
-        </button>
+        {/* Desktop & Tablet Quick Tools */}
+        <div className="hidden md:flex items-center gap-1.5">
+          <button
+            onClick={() => setFortyExcelsModalOpen(true)}
+            className="px-2.5 py-1.5 rounded-[8px] text-[12px] font-semibold flex items-center gap-1.5 border border-[#63EDFF]/45 bg-[var(--ce-accent-ai-bg)] text-[var(--ce-accent-ai)] hover:border-[#63EDFF] transition cursor-pointer"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5" />
+            <span>40 Excel</span>
+          </button>
 
-        <button
-          onClick={toggleIotTags}
-          className={`px-2 py-1.5 rounded-[8px] text-[12px] font-semibold flex items-center gap-1 border transition cursor-pointer ${
-            showIotTags
-              ? 'bg-[#0866FF]/20 text-[#63EDFF] border-[#63EDFF]'
-              : 'bg-[var(--ce-bg-section)] text-[var(--ce-text-secondary)] border-[var(--ce-border-subtle)] hover:text-[var(--ce-text-primary)]'
-          }`}
-          title="Mostrar u ocultar los 12 sensores IIoT en el espacio 3D"
-        >
-          <Activity className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline">IoT</span>
-        </button>
+          <button
+            onClick={toggleIotTags}
+            className={`px-2 py-1.5 rounded-[8px] text-[12px] font-semibold flex items-center gap-1 border transition cursor-pointer ${
+              showIotTags
+                ? 'bg-[#0866FF]/20 text-[#63EDFF] border-[#63EDFF]'
+                : 'bg-[var(--ce-bg-section)] text-[var(--ce-text-secondary)] border-[var(--ce-border-subtle)]'
+            }`}
+          >
+            <Activity className="w-3.5 h-3.5" />
+            <span>IoT</span>
+          </button>
 
-        <select
-          aria-label="Moneda"
-          value={currency}
-          onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
-          className="ce-mono px-1.5 py-1.5 rounded-[6px] text-[11.5px] font-semibold bg-[var(--ce-bg-section)] text-[var(--ce-text-primary)] border border-[var(--ce-border-subtle)] cursor-pointer"
-        >
-          <option value="COP">COP</option>
-          <option value="USD">USD</option>
-          <option value="PEN">PEN</option>
-          <option value="MXN">MXN</option>
-        </select>
+          <select
+            aria-label="Moneda"
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
+            className="ce-mono px-1.5 py-1.5 rounded-[6px] text-[11.5px] font-semibold bg-[var(--ce-bg-section)] text-[var(--ce-text-primary)] border border-[var(--ce-border-subtle)] cursor-pointer"
+          >
+            <option value="COP">COP</option>
+            <option value="USD">USD</option>
+            <option value="PEN">PEN</option>
+            <option value="MXN">MXN</option>
+          </select>
 
-        <button
-          onClick={toggleSound}
-          className="p-1.5 rounded-[8px] bg-[var(--ce-bg-section)] text-[var(--ce-text-secondary)] border border-[var(--ce-border-subtle)] hover:text-[var(--ce-text-primary)] cursor-pointer"
-          title={soundEnabled ? 'Silenciar efectos táctiles' : 'Activar efectos táctiles'}
-          aria-label="Sonido de interfaz"
-        >
-          {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
-        </button>
+          <button
+            onClick={toggleSound}
+            className="p-1.5 rounded-[8px] bg-[var(--ce-bg-section)] text-[var(--ce-text-secondary)] border border-[var(--ce-border-subtle)] cursor-pointer"
+            aria-label="Sonido"
+          >
+            {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+          </button>
 
-        <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="p-1.5 rounded-[8px] bg-[var(--ce-bg-section)] text-[var(--ce-text-secondary)] border border-[var(--ce-border-subtle)] hover:text-[var(--ce-text-primary)] cursor-pointer hidden sm:flex"
-          aria-label="Tema claro/oscuro"
-        >
-          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-        </button>
+          <button
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            className="p-1.5 rounded-[8px] bg-[var(--ce-bg-section)] text-[var(--ce-text-secondary)] border border-[var(--ce-border-subtle)] cursor-pointer"
+            aria-label="Tema"
+          >
+            {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </button>
+        </div>
 
+        {/* Analytics Drawer Toggle (All Devices) */}
         <button
           onClick={() => setRightDrawerOpen(!rightDrawerOpen)}
-          className={`px-2.5 py-1.5 rounded-[8px] text-[12px] font-semibold flex items-center gap-1.5 border transition cursor-pointer ${
+          className={`px-2 sm:px-2.5 py-1.5 rounded-[8px] text-[12px] font-semibold flex items-center gap-1 border transition cursor-pointer ${
             rightDrawerOpen
               ? 'bg-[#0866FF] text-white border-[#0866FF]'
-              : 'bg-[var(--ce-bg-section)] text-[var(--ce-text-secondary)] border-[var(--ce-border-subtle)] hover:text-[var(--ce-text-primary)]'
+              : 'bg-[var(--ce-bg-section)] text-[var(--ce-text-secondary)] border-[var(--ce-border-subtle)]'
           }`}
-          title="Abrir o cerrar panel de analítica detallada"
+          aria-label="Abrir analítica"
         >
-          <BarChart3 className="w-3.5 h-3.5" />
+          <BarChart3 className="w-4 h-4 sm:w-3.5 sm:h-3.5" />
           <span className="hidden lg:inline">Analítica</span>
         </button>
+
+        {/* Mobile Tools Overflow Menu (< 768px) */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden p-1.5 rounded-[8px] bg-[var(--ce-bg-section)] text-[var(--ce-text-primary)] border border-[var(--ce-border-subtle)] cursor-pointer"
+          aria-label="Más opciones"
+        >
+          {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+        </button>
       </div>
+
+      {/* Mobile Dropdown Tools Drawer */}
+      {mobileMenuOpen && (
+        <div className="md:hidden absolute top-[58px] right-2 w-[250px] p-3 rounded-[12px] bg-[#050D1F]/96 backdrop-blur-md border border-[#1E3158] shadow-2xl z-50 space-y-2.5">
+          <div className="ce-overline text-[9.5px] text-[#63EDFF]">HERRAMIENTAS DEL SIMULADOR</div>
+
+          <button
+            onClick={() => {
+              setFortyExcelsModalOpen(true);
+              setMobileMenuOpen(false);
+            }}
+            className="w-full py-2.5 px-3 rounded-[8px] bg-[#0866FF]/18 border border-[#63EDFF]/45 text-[#63EDFF] text-[12.5px] font-semibold flex items-center gap-2 cursor-pointer"
+          >
+            <FileSpreadsheet className="w-4 h-4" />
+            <span>Comparar 40 Excel vs. 3D</span>
+          </button>
+
+          <button
+            onClick={() => {
+              toggleIotTags();
+              setMobileMenuOpen(false);
+            }}
+            className={`w-full py-2.5 px-3 rounded-[8px] border text-[12.5px] font-semibold flex items-center justify-between cursor-pointer ${
+              showIotTags
+                ? 'bg-[#0866FF] text-white border-[#0866FF]'
+                : 'bg-[#0B1630] text-[#F1F5F9] border-[#1E3158]'
+            }`}
+          >
+            <span className="flex items-center gap-2">
+              <Activity className="w-4 h-4" /> Etiquetas IoT (12)
+            </span>
+            <span className="ce-mono text-[11px]">{showIotTags ? 'ON' : 'OFF'}</span>
+          </button>
+
+          <div className="grid grid-cols-3 gap-1.5">
+            <select
+              aria-label="Moneda móvil"
+              value={currency}
+              onChange={(e) => setCurrency(e.target.value as CurrencyCode)}
+              className="ce-mono py-2 px-2 rounded-[6px] text-[12px] font-semibold bg-[#0B1630] text-white border border-[#1E3158]"
+            >
+              <option value="COP">COP</option>
+              <option value="USD">USD</option>
+              <option value="PEN">PEN</option>
+              <option value="MXN">MXN</option>
+            </select>
+
+            <button
+              onClick={toggleSound}
+              className="py-2 rounded-[6px] bg-[#0B1630] border border-[#1E3158] text-white flex items-center justify-center cursor-pointer"
+              aria-label="Alternar sonido"
+            >
+              {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            </button>
+
+            <button
+              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              className="py-2 rounded-[6px] bg-[#0B1630] border border-[#1E3158] text-white flex items-center justify-center cursor-pointer"
+              aria-label="Alternar tema"
+            >
+              {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

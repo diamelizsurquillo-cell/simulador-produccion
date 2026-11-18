@@ -1,5 +1,4 @@
 import {
-  AlertTriangle,
   CheckCircle2,
   Crosshair,
   Database,
@@ -7,8 +6,10 @@ import {
   FileSpreadsheet,
   Sliders,
   Sparkles,
-  Wifi
+  Wifi,
+  X
 } from 'lucide-react';
+import { useDeviceViewport } from '../../hooks/useDeviceViewport';
 import {
   ASSETS_CATALOG,
   formatMoney,
@@ -85,6 +86,8 @@ export function RightAnalyticsDrawer() {
   const setSapModalOpen = useSimulationStore((s) => s.setSapModalOpen);
   const setFortyExcelsModalOpen = useSimulationStore((s) => s.setFortyExcelsModalOpen);
   const sapNotificationCreated = useSimulationStore((s) => s.sapNotificationCreated);
+  const setRightDrawerOpen = useSimulationStore((s) => s.setRightDrawerOpen);
+  const { isCompact, deviceType } = useDeviceViewport();
 
   if (!rightDrawerOpen) return null;
 
@@ -107,13 +110,21 @@ export function RightAnalyticsDrawer() {
     sixBigLosses.processRejectsMin +
     sixBigLosses.startupRejectsMin;
 
+  const drawerContainerClass = isCompact
+    ? 'fixed inset-x-0 top-[58px] bottom-0 z-40 w-full sm:w-[440px] sm:left-auto sm:right-0'
+    : deviceType === 'laptop'
+      ? 'w-[360px] h-[calc(100dvh-58px)] z-20'
+      : 'w-[415px] h-[calc(100dvh-58px)] z-20';
+
   return (
-    <aside className="pointer-events-auto w-[415px] max-w-[94vw] h-[calc(100vh-60px)] bg-[var(--ce-bg-section)]/95 backdrop-blur-md border-l border-[var(--ce-border-subtle)] flex flex-col z-20">
+    <aside
+      className={`pointer-events-auto ${drawerContainerClass} bg-[var(--ce-bg-section)]/96 backdrop-blur-md border-l border-[var(--ce-border-subtle)] flex flex-col`}
+    >
       {/* Top OEE & Shift Header */}
-      <div className="px-4 pt-3 pb-2.5 border-b border-[var(--ce-border-subtle)] flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
+      <div className="px-4 pt-3 pb-2.5 border-b border-[var(--ce-border-subtle)] flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
           <div
-            className={`w-7 h-7 rounded-[6px] flex items-center justify-center font-bold text-xs ${
+            className={`w-7 h-7 rounded-[6px] flex items-center justify-center font-bold text-xs shrink-0 ${
               activeAlarms.some((a) => a.severity === 'critical')
                 ? 'bg-[#F04438] text-white'
                 : activeAlarms.length > 0
@@ -123,23 +134,32 @@ export function RightAnalyticsDrawer() {
           >
             {activeAlarms.length > 0 ? '!' : '✓'}
           </div>
-          <div>
-            <div className="ce-heading text-[14.5px] text-[var(--ce-text-primary)] leading-tight">
-              Diagnóstico OEE · Gemelo
+          <div className="min-w-0">
+            <div className="ce-heading text-[14.5px] text-[var(--ce-text-primary)] leading-tight truncate">
+              Diagnóstico OEE · Simulador
             </div>
-            <div className="text-[11px] text-[var(--ce-text-muted)]">
+            <div className="text-[11px] text-[var(--ce-text-muted)] truncate">
               Medido en llenadora (cuello de botella)
             </div>
           </div>
         </div>
 
-        <div className="text-right">
-          <div className="ce-mono text-[15px] font-semibold text-[var(--ce-text-primary)] leading-tight">
-            {clock}
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="text-right">
+            <div className="ce-mono text-[14px] sm:text-[15px] font-semibold text-[var(--ce-text-primary)] leading-tight">
+              {clock}
+            </div>
+            <div className="ce-mono text-[10px] text-[var(--ce-text-muted)]">
+              Turno A · min {shiftMinute}
+            </div>
           </div>
-          <div className="ce-mono text-[10.5px] text-[var(--ce-text-muted)]">
-            Turno A · min {shiftMinute}
-          </div>
+          <button
+            onClick={() => setRightDrawerOpen(false)}
+            className="p-1.5 rounded-[8px] bg-[var(--ce-bg-card-elevated)] text-[var(--ce-text-secondary)] hover:text-[var(--ce-text-primary)] cursor-pointer"
+            aria-label="Cerrar panel analítico"
+          >
+            <X className="w-4 h-4" />
+          </button>
         </div>
       </div>
 

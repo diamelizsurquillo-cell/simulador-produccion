@@ -31,7 +31,7 @@ export function AssetAndHseInspectorCard() {
   if (selectedHseId && HSE_CATALOG[selectedHseId]) {
     const hse = HSE_CATALOG[selectedHseId];
     return (
-      <aside className="pointer-events-auto w-[290px] rounded-[12px] bg-[var(--ce-bg-card)] backdrop-blur-md border border-[#F04438] p-3.5 shadow-2xl space-y-2.5">
+      <aside className="pointer-events-auto w-[calc(100vw-24px)] max-w-[300px] rounded-[12px] bg-[var(--ce-bg-card)] backdrop-blur-md border border-[#F04438] p-3 sm:p-3.5 shadow-2xl space-y-2.5">
         <div className="flex items-center justify-between">
           <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#F04438] text-white">
             ✕ EMERGENCIA HSE ACTIVA
@@ -66,7 +66,7 @@ export function AssetAndHseInspectorCard() {
   const topFmea = businessImpact.fmeaRanking[0];
 
   return (
-    <aside className="pointer-events-auto w-[295px] rounded-[12px] bg-[var(--ce-bg-card)] backdrop-blur-md border border-[var(--ce-border-strong)] p-3.5 shadow-2xl space-y-3">
+    <aside className="pointer-events-auto w-[calc(100vw-24px)] max-w-[305px] max-h-[55dvh] overflow-y-auto rounded-[12px] bg-[var(--ce-bg-card)] backdrop-blur-md border border-[var(--ce-border-strong)] p-3 sm:p-3.5 shadow-2xl space-y-2.5">
       <div className="flex items-start justify-between gap-2">
         <div>
           <div className="ce-mono text-[10px] text-[#63EDFF]">UT SAP {asset.sapLocation}</div>
