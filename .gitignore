@@ -1,0 +1,16 @@
+# Dependencies & Build
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Logs & OS
+*.log
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# Local reference video (not part of production web app)
+*.mp4
+
+*.tsbuildinfo

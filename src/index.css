@@ -1,0 +1,131 @@
+@import "tailwindcss";
+@import "./styles/ce-tokens.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--ce-bg-page);
+  color: var(--ce-text-primary);
+  font-family: var(--ce-font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tipografía Oficial Canal Ejecutivo (§4.2 - §4.3) */
+.ce-display {
+  font-family: var(--ce-font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+}
+
+.ce-heading {
+  font-family: var(--ce-font-display);
+  font-weight: 600;
+  line-height: 1.18;
+}
+
+.ce-overline {
+  font-family: var(--ce-font-display);
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ce-table-head {
+  font-family: var(--ce-font-display);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ce-mono {
+  font-family: var(--ce-font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Geometría con Chaflán 45° — Sin mezclar con border-radius (§5.1 - §5.2) */
+.ce-chamfer-md {
+  border-radius: 0 !important;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--ce-chamfer-md)) 0,
+    100% var(--ce-chamfer-md),
+    100% 100%,
+    var(--ce-chamfer-md) 100%,
+    0 calc(100% - var(--ce-chamfer-md))
+  );
+}
+
+.ce-chamfer-sm {
+  border-radius: 0 !important;
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--ce-chamfer-sm)) 0,
+    100% var(--ce-chamfer-sm),
+    100% 100%,
+    var(--ce-chamfer-sm) 100%,
+    0 calc(100% - var(--ce-chamfer-sm))
+  );
+}
+
+/* Línea Signal de progreso / conexión IA (§5.2 & §8.1: máx 4 px) */
+.ce-signal-bar {
+  background: linear-gradient(90deg, #0866FF 0%, #63EDFF 100%);
+}
+
+/* Patrón oficial Trazado de Nodos (§5.3) */
+.ce-node-pattern {
+  background-image: url("/brand/ce-patron-trazado-nodos.svg");
+  background-size: 320px 200px;
+}
+
+/* Foco accesible WCAG 2.2 AA (§7.5) */
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 3px solid var(--ce-focus-ring);
+  outline-offset: 1px;
+}
+
+/* Scrollbar limpio para paneles de dashboard */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ce-border-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ce-brand);
+}
+
+@keyframes cePulseCyan {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.88);
+  }
+}
+
+.ce-pulse-dot {
+  animation: cePulseCyan 2s ease-in-out infinite;
+}

@@ -1,0 +1,108 @@
+:root {
+  /* 1. PALETA PRIMITIVA OFICIAL — CANAL EJECUTIVO v1.0 (§3.2 - §3.3) */
+  --ce-blue-50: #EEF4FF;
+  --ce-blue-100: #DCE8FF;
+  --ce-blue-200: #B9D1FF;
+  --ce-blue-300: #8AB3FF;
+  --ce-blue-400: #4D8EFF;
+  --ce-blue-500: #0866FF; /* Azul Ejecutivo Primario (Verificado) */
+  --ce-blue-600: #0052DB;
+  --ce-blue-700: #0041AD;
+  --ce-blue-800: #063486;
+  --ce-blue-900: #0A2A66;
+  --ce-blue-950: #071A40; /* Azul Profundo */
+
+  /* Cian Zyro — Acento de datos e IA activa (≤ 5%) */
+  --ce-cyan-300: #A9FEFF;
+  --ce-cyan-400: #63EDFF;
+  --ce-cyan-500: #1FD3F0;
+  --ce-cyan-600: #0AA5C2;
+  --ce-cyan-700: #0A7E96;
+  --ce-cyan-800: #0B6476;
+
+  /* Azul Noche — Modo oscuro oficial para dashboards y herramientas IA */
+  --ce-night-950: #050D1F;
+  --ce-night-900: #0B1630;
+  --ce-night-800: #12213F;
+  --ce-night-700: #1E3158;
+
+  /* Escala Grafito */
+  --ce-gray-25: #F8FAFC;
+  --ce-gray-50: #F1F5F9;
+  --ce-gray-100: #E2E8F0;
+  --ce-gray-200: #CBD5E1;
+  --ce-gray-300: #94A3B8;
+  --ce-gray-400: #64748B;
+  --ce-gray-500: #475569;
+  --ce-gray-600: #334155;
+  --ce-gray-700: #1E293B;
+  --ce-gray-800: #111A2E;
+  --ce-gray-900: #0B1220; /* Tinta */
+
+  /* Colores funcionales WCAG 2.2 AA (§3.4) */
+  --ce-status-success: #12B76A;
+  --ce-status-success-bg-light: #ECFDF3;
+  --ce-status-success-text-light: #067647;
+
+  --ce-status-warning: #F79009;
+  --ce-status-warning-bg-light: #FFFAEB;
+  --ce-status-warning-text-light: #B54708;
+
+  --ce-status-error: #F04438;
+  --ce-status-error-bg-light: #FEF3F2;
+  --ce-status-error-text-light: #B42318;
+
+  --ce-status-info: #0866FF;
+
+  /* Tipografías oficiales (§4.1) */
+  --ce-font-display: "Chakra Petch", "Bahnschrift", sans-serif;
+  --ce-font-body: "Inter", "Segoe UI", Arial, sans-serif;
+  --ce-font-mono: "JetBrains Mono", Consolas, monospace;
+
+  /* Radios y Chaflanes (§5.1 - §5.2) */
+  --ce-radius-sm: 4px;
+  --ce-radius-md: 8px;
+  --ce-radius-lg: 12px;
+  --ce-chamfer-sm: 8px;
+  --ce-chamfer-md: 14px;
+  --ce-chamfer-lg: 24px;
+
+  /* Tokens Semánticos — Modo Claro */
+  --ce-bg-page: #FFFFFF;
+  --ce-bg-canvas-veil: rgba(248, 250, 252, 0.92);
+  --ce-bg-section: #F8FAFC;
+  --ce-bg-card: rgba(255, 255, 255, 0.95);
+  --ce-bg-card-elevated: #F1F5F9;
+  --ce-border-subtle: #E2E8F0;
+  --ce-border-strong: #CBD5E1;
+  --ce-text-primary: #0B1220;
+  --ce-text-secondary: #475569;
+  --ce-text-muted: #64748B;
+  --ce-brand: #0866FF;
+  --ce-brand-hover: #0052DB;
+  --ce-link: #0052DB;
+  --ce-focus-ring: rgba(8, 102, 255, 0.35);
+  --ce-accent-ai: #0041AD;
+  --ce-accent-ai-bg: #EEF4FF;
+  --ce-grid-line: #E2E8F0;
+}
+
+[data-theme="dark"] {
+  --ce-bg-page: #050D1F;
+  --ce-bg-canvas-veil: rgba(5, 13, 31, 0.90);
+  --ce-bg-section: #0B1630;
+  --ce-bg-card: rgba(11, 22, 48, 0.93);
+  --ce-bg-card-elevated: #12213F;
+  --ce-border-subtle: #12213F;
+  --ce-border-strong: #1E3158;
+  --ce-text-primary: #F1F5F9;
+  --ce-text-secondary: #B6C2D4;
+  --ce-text-muted: #8FA0BD;
+  --ce-brand: #0866FF;
+  --ce-brand-hover: #4D8EFF;
+  --ce-link: #8AB3FF;
+  --ce-focus-ring: rgba(99, 237, 255, 0.45);
+  --ce-accent-ai: #63EDFF;
+  --ce-accent-ai-bg: rgba(99, 237, 255, 0.10);
+  --ce-grid-line: rgba(30, 49, 88, 0.55);
+}
